@@ -3,16 +3,20 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
-use App\Filament\Resources\UserResource\RelationManagers;
+use App\Models\Department;
 use App\Models\User;
+
 use Filament\Forms;
+use Filament\Forms\Components\Actions\Action;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Forms\Components\TextInput;
+
 
 class UserResource extends Resource
 {
@@ -24,6 +28,30 @@ class UserResource extends Resource
     {
         return $form
             ->schema([
+                Select::make('departments')
+                    ->relationship('departments', 'name')
+                    ->searchable()
+                    ->multiple()
+                    ->suffixAction(
+                        Action::make('addNewOption')
+                            ->icon('heroicon-o-plus-circle')
+                            ->action(function ($data, $set) use ($form) {
+                                $department = Department::create($data);
+                                $selectedDepartments = $form->model?->departments ?? collect([]);
+                                $newDepartments = collect($selectedDepartments->push($department))->pluck('id')->toArray();
+                                $set('departments', $newDepartments);
+                            })
+                            ->form([
+                                Section::make([
+                                    TextInput::make('name'),
+                                    TextInput::make('address'),
+                                ])
+
+                            ]),
+
+                    ),
+
+
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
@@ -32,15 +60,21 @@ class UserResource extends Resource
                     ->email()
                     ->required()
                     ->maxLength(255),
-                Select::make('departments')
-                    ->relationship('departments', 'name')
-                    ->multiple(),
+
 
                 Forms\Components\TextInput::make('password')
                     ->password()
                     ->required()
                     ->hiddenOn('edit')
                     ->maxLength(255),
+
+
+
+                Select::make('roles')
+                    ->relationship('roles', 'name')
+                    ->multiple()
+                    ->preload()
+                    ->searchable()
                 // Select::make('devices')
                 //     ->relationship('devices', 'name')
                 //     ->multiple()
