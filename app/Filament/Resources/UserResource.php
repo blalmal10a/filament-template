@@ -43,15 +43,12 @@ class UserResource extends Resource
                             })
                             ->form([
                                 Section::make([
-                                    TextInput::make('name'),
-                                    TextInput::make('address'),
+                                    TextInput::make('name')->required(),
+                                    TextInput::make('address')->required(),
                                 ])
 
                             ]),
-
                     ),
-
-
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
