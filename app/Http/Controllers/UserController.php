@@ -38,7 +38,10 @@ class UserController extends Controller
         }
         $validated = $request->validated();
         $validated['password'] = bcrypt($validated['password']);
-        return User::create($validated);
+        return User::updateOrCreate(
+            $validated['phone'],
+            $validated
+        );
     }
 
     /**
