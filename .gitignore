@@ -19,3 +19,7 @@ yarn-error.log
 /.vscode
 
 backup
+.DS_Store
+app/.DS_Store
+database/.DS_Store
+storage/.DS_Store
