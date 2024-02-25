@@ -30,7 +30,7 @@ class UserController extends Controller
     public function store(StoreUserRequest $request)
     {
         if (User::where('phone', $request->phone)
-            ->whereNotNull('phone_verified_at')
+            ->whereNotNull('phone_verified_at')->first()
         ) {
             return response([
                 'message' => 'Phone number has already been registered',
@@ -39,7 +39,9 @@ class UserController extends Controller
         $validated = $request->validated();
         $validated['password'] = bcrypt($validated['password']);
         return User::updateOrCreate(
-            $validated['phone'],
+            [
+                'phone' => $validated['phone']
+            ],
             $validated
         );
     }
