@@ -19,10 +19,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('dfdf', fn () =>   [
-    'date' => date('Y-m-d H:i:s'),
-    'now' => now(),
-    'time' => time(),
-]);
+
 
 Route::apiResource('users', UserController::class);
