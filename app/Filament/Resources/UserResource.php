@@ -34,11 +34,32 @@ class UserResource extends Resource
                     ->maxLength(255),
                 TextInput::make('email')
                     ->email()
-                    ->required()
+                    // ->required()
                     ->maxLength(255),
-                Section::make([
-                    CustomFileUpload::make('path')
-                ])->relationship('image'),
+                // Section::make([
+                //     CustomFileUpload::make('path')
+                //         ->label('Profile picture')
+                // ])->relationship('image'),
+                FileUpload::make('image')
+                    ->acceptedFileTypes(['image/jpeg', 'image/png'])
+                    ->imageEditor()
+                    ->imagePreviewHeight(100)
+                    // ->multiple()
+                    ->dehydrated(false)
+                    // ->minFiles(1)
+                    ->saveRelationshipsUsing(function (FileUpload $component, $state) {
+                        $record = $component->getRecord();
+                        $record?->image()->delete();
+                        foreach ($state ?? [] as $file) {
+                            $record?->image()->create([
+                                'path' => $file,
+                            ]);
+                        }
+                    })
+                    ->afterStateHydrated(function ($state, $record, $set) {
+                        $data = $record?->image?->pluck('path', 'id')->toArray();
+                        $set('image', $data);
+                    }),
                 Toggle::make('update_password')
                     ->hiddenOn('create')
                     ->reactive()

@@ -8,7 +8,7 @@ use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -64,9 +64,9 @@ class User extends Authenticatable implements FilamentUser
         return true;
     }
 
-    // public function images(): MorphToMany
+    // public function images(): MorphMany
     // {
-    //     return $this->morphToMany(Image::class, 'imageable', 'imageable');
+    //     return $this->morphMany(Image::class, 'imageable');
     // }
     public function image()
     {
