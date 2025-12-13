@@ -17,11 +17,11 @@ if [ -f app_config.json ]; then
 else
     # Prompt user for application name and port number
     read -p "Enter the Application Name: " app_name
-    read -p "Enter port number (default is 8000): " port_no
+    read -p "Enter port number (default is 24081): " port_no
     
     # Use default if no input is given for port
     if [[ -z "$port_no" ]]; then
-        port_no=8000  # Set default port
+        port_no=24081  # Set default port
     fi
     
 fi
