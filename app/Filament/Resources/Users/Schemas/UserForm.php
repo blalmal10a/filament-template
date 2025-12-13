@@ -30,9 +30,9 @@ class UserForm
                     ->dehydrated(false)
                     ->saveRelationshipsUsing(function (FileUpload $component, $state) {
                         $record = $component->getRecord();
-                        $record?->image()->delete();
+                        $record?->image()?->delete();
                         foreach ($state ?? [] as $file) {
-                            $record?->image()->create([
+                            $record?->image()?->create([
                                 'path' => $file,
                             ]);
                         }
