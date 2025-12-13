@@ -43,6 +43,7 @@ class UserForm
                     }),
 
                 Toggle::make('update_password')
+                    ->dehydrated(false)
                     ->hiddenOn('create')
                     ->reactive(),
                 TextInput::make('password')
