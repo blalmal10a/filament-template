@@ -16,11 +16,7 @@ class UsersTable
     public static function configure(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(function ($query) {
-                $query->whereHas('roles', function ($query) {
-                    $query->whereNot('name', 'super_admin');
-                });
-            })
+
             ->columns([
                 TextColumn::make('name')
                     ->searchable(),
