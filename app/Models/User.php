@@ -7,6 +7,7 @@ namespace App\Models;
 use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -58,7 +59,23 @@ class User extends Authenticatable implements FilamentUser
             'password' => 'hashed',
         ];
     }
+    protected static function boot()
+    {
+        parent::boot();
 
+        static::addGlobalScope('excludeSuperAdmin', function (Builder $builder) {
+            // Check if the user is explicitly requesting super admins (using the local scope check)
+            if (!in_array('withSuperAdmin', $builder->getQuery()->columns ?? [])) {
+                $builder->whereDoesntHave('roles', function (Builder $query) {
+                    $query->where('roles.name', 'super_admin');
+                });
+            }
+        });
+    }
+    public function scopeWithSuperAdmin(Builder $query): void
+    {
+        $query->withoutGlobalScope('excludeSuperAdmin');
+    }
     public function canAccessPanel(Panel $panel): bool
     {
         return true;
