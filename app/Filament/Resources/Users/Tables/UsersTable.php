@@ -16,7 +16,9 @@ class UsersTable
     public static function configure(Table $table): Table
     {
         return $table
-
+            ->modifyQueryUsing(function ($query) {
+                $query->withoutSuperAdmin();
+            })
             ->columns([
                 TextColumn::make('name')
                     ->searchable(),

@@ -23,24 +23,24 @@ class UserForm
                     ->email()
                     ->maxLength(255),
 
-                FileUpload::make('image')
-                    ->acceptedFileTypes(['image/jpeg', 'image/png'])
-                    ->imageEditor()
-                    ->imagePreviewHeight(100)
-                    ->dehydrated(false)
-                    ->saveRelationshipsUsing(function (FileUpload $component, $state) {
-                        $record = $component->getRecord();
-                        $record?->image()?->delete();
-                        foreach ($state ?? [] as $file) {
-                            $record?->image()?->create([
-                                'path' => $file,
-                            ]);
-                        }
-                    })
-                    ->afterStateHydrated(function ($state, $record, $set) {
-                        $data = $record?->image?->pluck('path', 'id')->toArray();
-                        $set('image', $data);
-                    }),
+                // FileUpload::make('image')
+                //     ->acceptedFileTypes(['image/jpeg', 'image/png'])
+                //     ->imageEditor()
+                //     ->imagePreviewHeight(100)
+                //     ->dehydrated(false)
+                //     ->saveRelationshipsUsing(function (FileUpload $component, $state) {
+                //         // $record = $component->getRecord();
+                //         // $record?->image()?->delete();
+                //         // foreach ($state ?? [] as $file) {
+                //         //     $record?->image()?->create([
+                //         //         'path' => $file,
+                //         //     ]);
+                //         // }
+                //     })
+                //     ->afterStateHydrated(function ($state, $record, $set) {
+                //         $data = $record?->image?->pluck('path', 'id')->toArray();
+                //         $set('image', $data);
+                //     }),
 
                 Toggle::make('update_password')
                     ->dehydrated(false)
@@ -60,9 +60,9 @@ class UserForm
                         ->relationship(
                             'roles',
                             'name',
-                            fn($query)
-                            => $query
-                                ->whereNotIn('name', ['super_admin'])
+                            // fn($query)
+                            // => $query
+                            //     ->whereNotIn('name', ['super_admin'])
                         )
                 ]),
             ]);
