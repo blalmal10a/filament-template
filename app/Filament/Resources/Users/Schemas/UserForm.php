@@ -60,9 +60,9 @@ class UserForm
                         ->relationship(
                             'roles',
                             'name',
-                            // fn($query)
-                            // => $query
-                            //     ->whereNotIn('name', ['super_admin'])
+                            fn($query)
+                            => $query
+                                ->whereNotIn('name', ['super_admin'])
                         )
                 ]),
             ]);
